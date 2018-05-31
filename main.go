@@ -20,14 +20,17 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 	//
-	// result, err := tx.Exec("INSERT INTO links (publicId, categoryId, title, url, isValid, postedEpoch) VALUES (?, ?, ?, ?, ?, ?)",
-	// 	uuid(),
+	// result, err := tx.Exec(`INSERT INTO links (publicId, categoryId, title, url, isValid, postedYear, postedMonth, postedDay) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+	// 	sysuuid(),
 	// 	1,
 	// 	"Ask HN: What is your favourite tech talk? | Hacker News",
 	// 	"https://news.ycombinator.com/item?id=16838460",
 	// 	true,
-	// 	time.Now().Unix(),
+	// 	time.Now().Year(),
+	// 	time.Now().Month(),
+	// 	time.Now().Day(),
 	// )
+	//
 	// if err != nil {
 	// 	tx.Rollback()
 	// 	log.Fatal("Insert Error: ", err)
@@ -47,7 +50,7 @@ func main() {
 	//
 	// db.Close()
 
-	http.HandleFunc("/links/", linksHandler(connect()))
+	http.HandleFunc("/links", linksHandler(connect()))
 
 	http.ListenAndServe(":8080", nil)
 }

@@ -1,0 +1,14 @@
+link json
+
+{
+  "link_id": "a2792163-6e8f-41fd-94f7-e91702ae1b6f",
+  "title": "Ask HN: What is your favourite tech talk? | Hacker News",
+  "url": "https:\/\/news.ycombinator.com\/item?id=16838460",
+  "category_id": "2598172394719028374",
+  "is_valid": true,
+  "posted_date": {
+    "year": 2018,
+    "month": 5,
+    "day": 30
+  }
+}

@@ -1,16 +1,18 @@
 package main
 
-import (
-	"time"
-)
-
 type link struct {
-	linkId           uint32
+	linkId           uint
 	PublicId         string `json:"link_id"`
 	Title            string `json:"title"`
 	Url              string `json:"url"`
-	categoryId       uint32
-	CategoryPublicId string    `json:"category_id"`
-	IsValid          bool      `json:"is_valid"`
-	PostedDate       time.Time `json:"posted_date"`
+	categoryId       uint
+	CategoryPublicId string `json:"category_id"`
+	IsValid          bool   `json:"is_valid"`
+	PostedDate       date   `json:"posted_date"`
+}
+
+type date struct {
+	Year  uint `json:"year"`
+	Month uint `json:"month"`
+	Day   uint `json:"day"`
 }
