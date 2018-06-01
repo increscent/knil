@@ -3,23 +3,24 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 )
 
 type httpError struct {
-	Error string
+	Error string `json:"error"`
 	code  int
+}
+
+type httpSuccess struct {
+	Success bool `json:"success"`
 }
 
 func linksHandler(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		url := r.URL.String()
 		folders := strings.Split(url, "/")
-		linkId := folders[len(folders)-1]
-
-		fmt.Println(linkId)
+		_ = folders[len(folders)-1]
 
 		var handler func(db *sql.DB, r *http.Request) (interface{}, *httpError)
 
@@ -28,6 +29,8 @@ func linksHandler(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 			handler = linksPost
 		case "GET":
 			handler = linksGet
+		case "DELETE":
+			handler = linksDelete
 		default:
 			handler = func(db *sql.DB, r *http.Request) (interface{}, *httpError) {
 				return nil, &httpError{"Invalid request method. Use GET, POST, or DELETE", 405}
@@ -76,4 +79,23 @@ func linksGet(db *sql.DB, r *http.Request) (interface{}, *httpError) {
 		return nil, &httpError{err.Error(), 500}
 	}
 	return l, nil
+}
+
+func linksDelete(db *sql.DB, r *http.Request) (interface{}, *httpError) {
+	err := r.ParseForm()
+	if err != nil {
+		return nil, &httpError{"Failed to parse request", 400}
+	}
+
+	linkPublicId := r.FormValue("link_id")
+	if linkPublicId == "" {
+		return nil, &httpError{"'link_id' not found in request", 400}
+	}
+
+	err = deleteLink(db, linkPublicId)
+	if err != nil {
+		return nil, &httpError{err.Error(), 500}
+	}
+
+	return httpSuccess{true}, nil
 }

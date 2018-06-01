@@ -117,6 +117,19 @@ func queryLinks(db *sql.DB, whereClause string) ([]link, error) {
 	return links, nil
 }
 
+func deleteLink(db *sql.DB, linkPublicId string) error {
+	result, err := db.Exec("DELETE FROM links WHERE publicId = ?", linkPublicId)
+	if err != nil {
+		return err
+	}
+	rows, err := result.RowsAffected()
+	if err != nil || rows == 0 {
+		return fmt.Errorf("Link not found")
+	}
+
+	return nil
+}
+
 func scanLink(r *sql.Rows) (*link, error) {
 	var (
 		linkId           uint

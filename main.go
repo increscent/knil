@@ -1,56 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	// fmt.Println("Hello world!")
-	//
-	// db := connect()
-	//
-	// if err := db.Ping(); err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// tx, err := db.Begin()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// result, err := tx.Exec(`INSERT INTO links (publicId, categoryId, title, url, isValid, postedYear, postedMonth, postedDay) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-	// 	sysuuid(),
-	// 	1,
-	// 	"Ask HN: What is your favourite tech talk? | Hacker News",
-	// 	"https://news.ycombinator.com/item?id=16838460",
-	// 	true,
-	// 	time.Now().Year(),
-	// 	time.Now().Month(),
-	// 	time.Now().Day(),
-	// )
-	//
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	log.Fatal("Insert Error: ", err)
-	// }
-	//
-	// rows, err := result.RowsAffected()
-	// fmt.Println(rows)
-	//
-	// err = tx.Commit()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// links, err := queryLinks(db)
-	//
-	// fmt.Println(links)
-	//
-	// db.Close()
+	db := connect()
 
-	http.HandleFunc("/links", linksHandler(connect()))
+	http.HandleFunc("/links", linksHandler(db))
 
+	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", nil)
 }
